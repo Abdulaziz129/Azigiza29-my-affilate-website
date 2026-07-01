@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Gear & Recommendations</title>
+    <style>
+        /* --- CSS Reset & Variables --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --nav-bg: #1d3557;
+            --text-main: #2b2d42;
+            --text-muted: #6c757d;
+            --accent-color: #00b4d8;
+            --accent-hover: #0077b6;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Navigation Bar --- */
+        nav {
+            background-color: var(--nav-bg);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #f1faee;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- Main Layout Container --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        /* --- Intro Hero --- */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--nav-bg);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Controls (Search & Filter) --- */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .search-bar:focus {
+            border-color: var(--accent-color);
+        }
+
+        .filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: #e9ecef;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        /* --- Products Grid --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #f1f3f5;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: #eaeded;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .tag {
+            align-self: flex-start;
+            background: #e3f2fd;
+            color: #0d47a1;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--nav-bg);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+        }
+
+        .price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2a9d8f;
+        }
+
+        .buy-btn {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .buy-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* --- Footer Section --- */
+        footer {
+            background-color: #111827;
+            color: #9ca3af;
+            padding: 3rem 1rem 1.5rem 1rem;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section ul li a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            padding-top: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
+            .controls {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .search-bar {
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- NAVIGATION HEADER --- -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-logo">🚀 CreatorKit</a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="https://youtube.com" target="_blank">My Channel</a></li>
+                <li><a href="https://twitter.com" target="_blank">Twitter</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- --- MAIN DASHBOARD CONTENT --- -->
+    <div class="container">
+        <header class="hero">
+            <h1>Recommended Gear & Tools</h1>
+            <p>An organized selection of tools, hardware, and assets I personally use and recommend to optimize your daily workflow.</p>
+        </header>
+
+        <!-- Search and Filter Section -->
+        <div class="controls">
+            <input type="text" id="search" class="search-bar" placeholder="Search setup, tech, books...">
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterCategory('all')">All Products</button>
+                <button class="filter-btn" onclick="filterCategory('tech')">Tech</button>
+                <button class="filter-btn" onclick="filterCategory('setup')">Desk Setup</button>
+                <button class="filter-btn" onclick="filterCategory('audio')">Audio/Video</button>
+                <button class="filter-btn" onclick="filterCategory('books')">Books</button>
+            </div>
+        </div>
+
+        <!-- Dynamic Grid Layout -->
+        <main class="grid" id="product-grid">
+            <!-- JavaScript dynamically populates products here -->
+        </main>
+    </div>
+
+    <!-- --- FOOTER SECTION --- -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About This Dashboard</h3>
+                <p>This page features handpicked recommendations. Clicking an item tracks back to my profile and supports content production at no extra cost to you.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Back to Top</a></li>
+                    <li><a href="https://github.com" target="_blank">GitHub Profile</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Affiliate Disclaimer</h3>
+                <p>As an associate with various affiliate networks, I earn a small percentage from qualifying marketplace purchases linked from this page.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 CreatorKit. All rights reserved. Powered by HTML, CSS, and JS.
+        </div>
+    </footer>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>
+        // Expanded Product database array 
+        const products = [
+            {
+                title: "Mechanical Keyboard",
+                category: "setup",
+                price: "$119.99",
+                desc: "Tactile typing experience optimized for extended programming and drafting schedules.",
+                img: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500",
+                link: "https://www.amazon.com/s?k=kids+shoes&_encoding=UTF8&pf_rd_p=bd9ba698-2b67-4e1b-a51d-d43a144c6cc2&pf_rd_r=DRX24FCXZTT3E9M3MA54&linkCode=ll2&tag=azigizajuni0a-20&linkId=8d5ef0d2821f82e32e17b5cb5f1a36ad&language=en_US&ref_=as_li_ss_tl"
+            },
+            {
+                title: "Samsung 32 ViewFinity S7 (S70H) High-Resolution Monitor - 4K UHD (3840x2160), HDR10, Eye Saver Mode, HDMI and DP Ports, Display Manager, LS32H704EANXZA",
+                category: "tech",
+                price: "$319.41",
+                desc: "Crisp multi-window layout rendering that charges your laptop via a single pipeline cable.",
+                img: "https://m.media-amazon.com/images/I/71DQlaDvsEL._AC_UY218_.jpg",
+                link: "https://amzn.to/441HNsq"
+            },
+            {
+                title: "Dynamic XLR Microphone",
+                category: "audio",
+                price: "$199.00",
+                desc: "Broadcast-quality studio capsule designed to minimize off-axis background room rumble.",
+                img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500",
+                link: "https://amzn.to/441HNsq/Microphone"
+            },
+            {
+                title: "Atomic Habits",
+                category: "books",
+                price: "$16.20",
+                desc: "The definitive operational playbook on breaking toxic routines and forging disciplined habits.",
+                img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500",
+                link: "https://amzn.to/441HNsq/"
+            },
+            {
+                title: "Ergonomic Office Chair",
+                category: "setup",
+                price: "$299.00",
+                desc: "Dynamic reactive lumber support structure built for multi-hour production tasks.",
+                img: "https://images.unsplash.com/photo-1505797149-43b0069ec26b?w=500",
+                link: "https://amzn.to/441HNsq"
+            },
+            {
+                title: "Wireless ANC Headphones",
+                category: "audio",
+                price: "$248.00",
+                desc: "Industry-standard active noise cancellation blocks environment sounds so you can hyper-focus.",
+                img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500",
+                link: "https://amzn.to/441HNsq/headphones"
+            },
+            {
+                title: "Deep Work",
+                category: "books",
+                price: "$18.00",
+                desc: "Rules for focused success in a distracted world. An absolute must-read for digital creators.",
+                img: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500",
+                link: "https://amzn.to/441HNsq"
+            },
+            {
+                title: "Samsung Galaxy Tab S11 128GB WiFi Android Tablet, Dynamic AMOLED 2X Display, 3nm MediaTek Processor, Galaxy AI, IP68, High Performance, Premium 11 AMOLED Screen, Slim, Portable Design, Silver",
+                category: "books",
+                price: "$913.87",
+                desc: "Rules for focused success in a distracted world. An absolute must-read for digital creators.",
+                img: "https://m.media-amazon.com/images/I/61b2MvG4qvL._AC_SY300_SX300_QL70_FMwebp_.jpg",
+                link: "https://amzn.to/441HNsq"
+            },
+            {
+                title: "Portable SSD (2TB)",
+                category: "tech",
+                price: "$159.99",
+                desc: "Blazing fast read/write speeds. Drop-resistant and compact enough for travel editing workflows.",
+                img: "https://images.unsplash.com/photo-1601524909162-be87252be298?w=500",
+                link: "https://amzn.to/441HNsq/ssd"
+            },
+            {
+                title: "LG gram Pro 17-inch Lightweight Laptop Computer, Intel Evo Edition Powered by Intel Core Ultra9 285H Processor, NVIDIA RTX5050, Windows 11 Home, 32GB RAM, 2TB SSD, Black",
+                category: "tech",
+                price: "$2,824.18",
+                desc: "Blazing fast read/write speeds. Drop-resistant and compact enough for travel editing workflows.",
+                img: "https://m.media-amazon.com/images/I/617zFnvYNlL._AC_UY218_.jpg",
+                link: "https://amzn.to/441HNsq"
+            },
+            {
+                title: "Amazon Basics Bluetooth On-Ear Headphones Wireless with Microphone, Deep Bass, 35 Hour Playtime, Foldable, Collapsible, Portable Travel Friendly, Black",
+                category: "tech",
+                price: "$25.21",
+                desc: "Enjoy hours of listening with soft ear cushions, adjustable padded headband, and lightweight design in our wireless headphones, offering comfort and easy portability.",
+                img: "https://m.media-amazon.com/images/I/41QaJinEpEL._AC_SR160,135_.jpg",
+                link: "https://amzn.to/441HNsq"
+            },
+            {
+                title: "ASUS 31.5” 4K HDR Eye Care Monitor (VP327Q) – UHD (3840 x 2160), 99% sRGB, HDR-10, Adaptive-Sync, Speakers, DisplayPort, HDMI, Flicker Free, Blue Light Filter, VESA Mountable,Black",
+                category: "tech",
+                price: "$173.24",
+                desc: "31.5-inch 4K UHD Display: Maximize productivity and enjoy breathtaking movie marathons with 4x the pixel density. Perfect 32 inch 4k monitor and pc screen for multitasking or streaming at home.",
+                img: 'https://images-na.ssl-images-amazon.com/images/I/81p0NWfCISL._AC_UL165_SR165,165_.jpg',
+                link: "https://amzn.to/441HNsq/ASUS 31.5"
+            }
+        ];
+
+        const grid = document.getElementById('product-grid');
+        const searchInput = document.getElementById('search');
+        let currentCategory = 'all';
+
+        // Display logic
+        function displayProducts(items) {
+            grid.innerHTML = "";
+            
+            if(items.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">No matching recommendations found.</p>`;
+                return;
+            }
+
+            items.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${product.img}" alt="${product.title}" class="card-img">
+                    <div class="card-content">
+                        <span class="tag">${product.category}</span>
+                        <h3 class="card-title">${product.title}</h3>
+                        <p class="card-desc">${product.desc}</p>
+                        <div class="card-footer">
+                            <span class="price">${product.price}</span>
+                            <a href="${product.link}" target="_blank" rel="noopener noreferrer" class="buy-btn">View Item</a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Category handling
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Highlight active filter target button securely
+            if(event) {
+                event.target.classList.add('active');
+            }
+
+            applyFilters();
+        }
+
+        // Search + filter unified processor
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            const filtered = products.filter(product => {
+                const matchesCategory = currentCategory === 'all' || product.category === currentCategory;
+                const matchesSearch = product.title.toLowerCase().includes(searchTerm) || 
+                                      product.desc.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesSearch;
+            });
+
+            displayProducts(filtered);
+        }
+
+        searchInput.addEventListener('input', applyFilters);
+        
+        // Initial setup run
+        displayProducts(products);
+    </script>
+</body>
+</html>
